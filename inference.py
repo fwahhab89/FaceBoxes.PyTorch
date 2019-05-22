@@ -7,11 +7,10 @@ import numpy as np
 from data import cfg
 from layers.functions.prior_box import PriorBox
 from utils.nms_wrapper import nms
-#from utils.nms.py_cpu_nms import py_cpu_nms
 import cv2
 from models.faceboxes import FaceBoxes
 from utils.box_utils import decode
-from utils.timer import Timer
+import time
 
 parser = argparse.ArgumentParser(description='FaceBoxes')
 
@@ -77,13 +76,13 @@ if __name__ == '__main__':
     net = FaceBoxes(phase='test', size=None, num_classes=2)    # initialize detector
     net = load_model(net, args.trained_model, args.cpu)
     net.eval()
-    print('Finished loading model!')
-    print(net)
+    
     cudnn.benchmark = True
     device = torch.device("cpu" if args.cpu else "cuda")
     net = net.to(device)
     resize = 1
 
+    start_time =time.time()
     img_name = args.img_file
     img_orig = cv2.imread(img_name, cv2.IMREAD_COLOR)
     img = np.float32(cv2.imread(img_name, cv2.IMREAD_COLOR))
@@ -132,7 +131,9 @@ if __name__ == '__main__':
         xmax = dets[k, 2]
         ymax = dets[k, 3]
         ymin += 0.2 * (ymax - ymin + 1)
-        print(dets[k, 0], dets[k, 1], dets[k, 2], dets[k, 3])
         score = dets[k, 4]
     vis_image = draw_detections_with_conf(img_orig, dets)
     cv2.imwrite('test.png', vis_image)
+
+    end_time = time.time()
+    print('Time Taken: ', end_time-start_time, ' seconds')
