@@ -80,6 +80,10 @@ python3 test.py --cpu
 ```
 
 3. Download [eval_tool](https://bitbucket.org/marcopede/face-eval) to evaluate the performance.
+
+## Inference
+1. Download [our pre-trained model](https://drive.google.com/open?id=128m1QasIwQRkrY-Eb5Epi-ShXnrZWUCQ) and save it in `$FaceBoxes_ROOT/weights`.
+2. python inference.py --trained_model weights/faceboxes.pth --cpu
     
 ## References
 - [Official release (Caffe)](https://github.com/sfzhang15/FaceBoxes)
